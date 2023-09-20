@@ -23,14 +23,20 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
     if (!result.destination) {
       return;
     }
+  
     const startIndex = result.source.index;
     const endIndex = result.destination.index;
-    const updatedFilteredImages = Array.from(filteredImages);
-    const [movedItem] = updatedFilteredImages.splice(startIndex, 1);
-    updatedFilteredImages.splice(endIndex, 0, movedItem);
-    onImageDragEnd(updatedFilteredImages);
+  
+    const updatedImages = [...filteredImages];
+    const [movedItem] = updatedImages.splice(startIndex, 1);
+    updatedImages.splice(endIndex, 0, movedItem);
+  
+    setFilteredImages(updatedImages);
+  
+    // If you want to maintain the search term while dragging, update it here as well
+    setSearchTerm(""); // Clear the search term to reset the filter
   };
-
+  
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -42,7 +48,7 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
   }
 
   return (
-    <div>
+    <div className="w-full">
       <input
         type="text"
         placeholder="Search by tag..."
@@ -56,7 +62,7 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-3 gap-6"
+              className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-3 gap-6"
             >
               {filteredImages.map((image, index) => (
                 <Draggable key={image.id} draggableId={image.id} index={index}>
