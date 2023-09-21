@@ -5,8 +5,7 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredImages, setFilteredImages] = useState(imageData);
-  const isSmallScreen = window.innerWidth < 768; // Define your breakpoint for small screens
-
+  const isSmallScreen = window.innerWidth < 768;
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -61,14 +60,13 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
         <Droppable
           droppableId="image-gallery"
           type="IMAGE"
-          direction={isSmallScreen ? "vertical" : "horizontal"} // Set direction based on screen size
+          direction={isSmallScreen ? "vertical" : "horizontal"}
         >
           {(provided) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="grid grid-cols-1 w-full md:grid-cols-3 lg:grid-cols-4 my-3 gap-6"
-            // Set width to 100% for large screens
+              className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-3 gap-6"
             >
               {filteredImages.map((image, index) => (
                 <Draggable key={image.id} draggableId={image.id} index={index}>
@@ -77,19 +75,17 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
+                      key={image.id}
+                      className="relative mx-4"
                       style={{
                         userSelect: "none",
-                        margin: "0 0 8px 0",
+
                         minHeight: "50px",
-                        backgroundColor: snapshot.isDragging
-                          ? "#263B4A"
-                          : "",
+                        backgroundColor: snapshot.isDragging ? "#263B4A" : "",
                         color: "white",
                         borderRadius: "4px",
                         ...provided.draggableProps.style,
                       }}
-                      key={image.id}
-                      className="relative mx-4"
                     >
                       <img
                         src={image.url}
