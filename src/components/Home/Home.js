@@ -6,7 +6,7 @@ import Footer from "./Footer";
 
 function Home() {
   return (
-    <div className="bg-cyan-900 h-screen">
+    <div className="bg-cyan-900">
       <Navbar />
       <section className="grid  lg:grid-cols-2 grid-cols-1 m-auto">
         <div className="text-white text-start flex flex-col justify-center mx-auto">

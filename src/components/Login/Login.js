@@ -40,7 +40,7 @@ const Login = () => {
     <div className="bg-cyan-900 h-screen">
       <Navbar />
 
-      <div className="flex flex-col items-center bg-white shadow-lg border-2 border-black w-full md:w-1/2 lg:w-1/3 mx-auto my-6 items-center justify-center rounded-2xl h-5/6">
+      <div className="flex flex-col items-center bg-white shadow-lg border-2 border-black w-5/6 md:w-1/2 lg:w-1/3 mx-auto px-7 my-6 items-center justify-center rounded-2xl h-5/6">
         <h1 className="text-4xl font-bold mb-4">Login</h1>
         <form className="w-full max-w-sm" onSubmit={handleLogin}>
         {error && ( 

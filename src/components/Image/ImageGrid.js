@@ -5,6 +5,7 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredImages, setFilteredImages] = useState(imageData);
+  const isSmallScreen = window.innerWidth < 768; // Define your breakpoint for small screens
 
   useEffect(() => {
     setTimeout(() => {
@@ -23,20 +24,20 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
     if (!result.destination) {
       return;
     }
-  
+
     const startIndex = result.source.index;
     const endIndex = result.destination.index;
-  
+
     const updatedImages = [...filteredImages];
     const [movedItem] = updatedImages.splice(startIndex, 1);
     updatedImages.splice(endIndex, 0, movedItem);
-  
+
     setFilteredImages(updatedImages);
-  
+
     // If you want to maintain the search term while dragging, update it here as well
     setSearchTerm(""); // Clear the search term to reset the filter
   };
-  
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -57,20 +58,36 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
         className="p-2 m-2 border  border-gray-400 w-1/2 cursor-pointer lg:w-1/3 rounded focus:outline-none focus:border-blue-500"
       />
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="image-gallery" type="IMAGE" direction="both">
+        <Droppable
+          droppableId="image-gallery"
+          type="IMAGE"
+          direction={isSmallScreen ? "vertical" : "horizontal"} // Set direction based on screen size
+        >
           {(provided) => (
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-3 gap-6"
+              className="grid grid-cols-1 w-full md:grid-cols-3 lg:grid-cols-4 my-3 gap-6"
+            // Set width to 100% for large screens
             >
               {filteredImages.map((image, index) => (
                 <Draggable key={image.id} draggableId={image.id} index={index}>
-                  {(provided) => (
+                  {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
+                      style={{
+                        userSelect: "none",
+                        margin: "0 0 8px 0",
+                        minHeight: "50px",
+                        backgroundColor: snapshot.isDragging
+                          ? "#263B4A"
+                          : "",
+                        color: "white",
+                        borderRadius: "4px",
+                        ...provided.draggableProps.style,
+                      }}
                       key={image.id}
                       className="relative mx-4"
                     >
