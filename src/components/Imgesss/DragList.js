@@ -200,7 +200,7 @@ function DragList() {
           onChange={handleSearch}
           className="p-2 mb-6 mt-2 border border-gray-400 w-1/2 cursor-pointer lg:w-1/3 rounded focus:outline-none focus:border-blue-500"
         />
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
   {Object.keys(lists).map((listKey) => (
     <Droppable key={listKey} droppableId={listKey}>
       {(provided) => (
