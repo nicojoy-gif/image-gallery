@@ -6,6 +6,7 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredImages, setFilteredImages] = useState(imageData);
   const isSmallScreen = window.innerWidth < 768;
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -32,9 +33,6 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
     updatedImages.splice(endIndex, 0, movedItem);
 
     setFilteredImages(updatedImages);
-
-    // If you want to maintain the search term while dragging, update it here as well
-    setSearchTerm(""); // Clear the search term to reset the filter
   };
 
   const handleSearch = (e) => {
@@ -54,55 +52,62 @@ const ImageGrid = ({ imageData, onImageDragEnd }) => {
         placeholder="Search by tag..."
         value={searchTerm}
         onChange={handleSearch}
-        className="p-2 m-2 border  border-gray-400 w-1/2 cursor-pointer lg:w-1/3 rounded focus:outline-none focus:border-blue-500"
+        className="p-2 m-2 border border-gray-400 w-1/2 cursor-pointer lg:w-1/3 rounded focus:outline-none focus:border-blue-500"
       />
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable
-          droppableId="image-gallery"
-          type="IMAGE"
-          direction={isSmallScreen ? "vertical" : "horizontal"}
-        >
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-3 gap-6"
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-3 gap-6">
+          {filteredImages.map((image, index) => (
+            <Droppable
+              key={image.id}
+              droppableId={image.id} // Unique ID for each Droppable
+              type="IMAGE"
+              direction={isSmallScreen ? "vertical" : "horizontal"}
             >
-              {filteredImages.map((image, index) => (
-                <Draggable key={image.id} draggableId={image.id} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      key={image.id}
-                      className="relative mx-4"
-                      style={{
-                        userSelect: "none",
-
-                        minHeight: "50px",
-                        backgroundColor: snapshot.isDragging ? "#263B4A" : "",
-                        color: "white",
-                        borderRadius: "4px",
-                        ...provided.draggableProps.style,
-                      }}
-                    >
-                      <img
-                        src={image.url}
-                        alt={image.tag}
-                        className="w-full h-64  lg:w-80 border-2 border-gray-600"
-                      />
-                      <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-2 text-sm">
-                        {image.tag}
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="relative mx-4"
+                >
+                  <Draggable
+                    key={image.id}
+                    draggableId={image.id}
+                    index={index}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="relative"
+                        style={{
+                          userSelect: "none",
+                          minHeight: "50px",
+                          backgroundColor: snapshot.isDragging
+                            ? "#263B4A"
+                            : "",
+                          color: "white",
+                          borderRadius: "4px",
+                          ...provided.draggableProps.style,
+                        }}
+                      >
+                        <img
+                          src={image.url}
+                          alt={image.tag}
+                          className="w-full h-64 lg:w-80 border-2 border-gray-600"
+                        />
+                        <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-2 text-sm">
+                          {image.tag}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+                    )}
+                  </Draggable>
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
+        </div>
       </DragDropContext>
     </div>
   );

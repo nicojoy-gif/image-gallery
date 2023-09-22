@@ -6,13 +6,14 @@ import { useUser } from '../Context/UserContext'
 import Home from '../Home/Home'
 import Image from '../Home/Image'
 import About from '../Home/About'
+import DragList from '../Imgesss/DragList'
 function Index() {
   const user = useUser();
   return (
     <>
 <Routes>
   <Route path='/' element={<Home />} />
-  <Route element={user ? <Image /> : <Login />} path="/image" />
+  <Route element={user ? <DragList /> : <Login />} path="/image" />
   <Route path="/login" element={<Login />} />
   <Route path='/signup' element={<Signup />}/>
   <Route path='/about' element={<About />} />
